@@ -5,7 +5,7 @@ package.domain = br.com.gleidson
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json,ttf,html
 version = 1.0.0
-requirements = python3,kivy==2.3.0,numpy,openssl,pyjnius,android
+requirements = python3,kivy==2.3.0,openssl,pyjnius,android
 orientation = portrait
 fullscreen = 0
 android.permissions = INTERNET,ACCESS_NETWORK_STATE
