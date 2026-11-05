@@ -1,19 +1,31 @@
-name: Build App
+ name: Build App
 on: push
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: pip install --upgrade pip buildozer cython
-      - run: |
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
+      - name: Install Buildozer
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer cython virtualenv
+      - name: Preparar Keystore
+        run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '\n\r ' | base64 -d > milionario.keystore
           sed -i 's/TROCAR_SENHA_AQUI/${{ secrets.KEYSTORE_PASSWORD }}/g' buildozer.spec
-      - run: yes | buildozer android release
-      - uses: actions/upload-artifact@v4
+      - name: Build with Buildozer
+        run: |
+          yes | buildozer android release
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
         with:
           name: aab
           path: bin/*.aab
