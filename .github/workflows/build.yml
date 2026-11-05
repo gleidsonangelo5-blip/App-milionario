@@ -1,0 +1,19 @@
+name: Build App
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: pip install --upgrade pip buildozer cython
+      - run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '\n\r ' | base64 -d > milionario.keystore
+          sed -i 's/TROCAR_SENHA_AQUI/${{ secrets.KEYSTORE_PASSWORD }}/g' buildozer.spec
+      - run: yes | buildozer android release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aab
+          path: bin/*.aab
