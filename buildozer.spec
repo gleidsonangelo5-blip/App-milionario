@@ -1,0 +1,24 @@
+[app]
+title = Milionario da Vez
+package.name = milionariodavez
+package.domain = br.com.gleidson
+source.dir = .
+source.include_exts = py,png,jpg,kv,atlas,json,ttf,html
+version = 1.0.0
+requirements = python3,kivy==2.3.0,numpy,openssl,pyjnius,android
+orientation = portrait
+fullscreen = 0
+android.permissions = INTERNET,ACCESS_NETWORK_STATE
+android.api = 34
+android.minapi = 21
+android.ndk = 25b
+android.ndk_api = 21
+android.archs = arm64-v8a, armeabi-v7a
+android.accept_sdk_license = True
+android.release_artifact = aab
+android.debug_artifact = apk
+android.numeric_version = 1
+android.keystore = milionario.keystore
+android.keyalias = milionario
+android.keystore_pass = TROCAR_SENHA_AQUI
+android.keyalias_pass = TROCAR_SENHA_AQUI
