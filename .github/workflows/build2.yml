@@ -1,5 +1,4 @@
- 
-name: Build App
+ name: Build App
 on: push
 jobs:
   build:
@@ -28,6 +27,9 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '\n\r ' | base64 -d > milionario.keystore
           sed -i 's/TROCAR_SENHA_AQUI/${{ secrets.KEYSTORE_PASSWORD }}/g' buildozer.spec
+      - name: Baixar Android SDK e aceitar licenças
+        run: |
+          yes | buildozer android update || true
       - name: Build with Buildozer
         run: |
           buildozer android release
