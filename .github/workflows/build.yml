@@ -36,3 +36,4 @@ jobs:
       with:
         name: aplicativo-play-store
         path: bin/*.aab
+
