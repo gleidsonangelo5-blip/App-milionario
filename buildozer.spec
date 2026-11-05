@@ -1,4 +1,4 @@
-[app]
+ [app]
 title = Milionario da Vez
 package.name = milionariodavez
 package.domain = br.com.gleidson
@@ -13,7 +13,7 @@ android.api = 34
 android.minapi = 21
 android.ndk = 25b
 android.ndk_api = 21
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 android.accept_sdk_license = True
 android.release_artifact = aab
 android.debug_artifact = apk
