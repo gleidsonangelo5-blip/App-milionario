@@ -1,4 +1,4 @@
- from kivy.config import Config
+  from kivy.config import Config
 Config.set('graphics', 'multisamples', '0')
 Config.set('graphics', 'resizable', '0')
 
@@ -60,8 +60,7 @@ def baixar_historico(api):
         return []
 
 def analisar(historico, n, k):
-    import numpy as np 
-    posicoes = np.zeros((k, n + 1), dtype=np.int64)
+    posicoes = [[0] * (n + 1) for _ in range(k)]
     frequencia = Counter()
     pares = Counter()
     trincas = Counter()
@@ -77,7 +76,7 @@ def analisar(historico, n, k):
         seguidos = sum(dezenas[i+1] - dezenas[i] == 1 for i in range(len(dezenas)-1))
         qtd_seguidos_hist[seguidos] += 1
         for p, x in enumerate(dezenas):
-            posicoes[p, x] += 1
+            posicoes[p][x] += 1
         pares.update(combinations(dezenas, 2))
         if k >= 3: trincas.update(combinations(dezenas, 3))
 
@@ -107,18 +106,20 @@ def avaliar_equilibrio(jogo, n, k):
     return max(0, round(pontos, 1))
 
 def pontuar_historico(jogo, stats, n):
-    import numpy as np
-    valores = np.array([stats["frequencia"].get(x, 0) for x in range(1, n + 1)], dtype=float)
-    desvio = valores.std()
+    valores = [stats["frequencia"].get(x, 0) for x in range(1, n + 1)]
+    if not valores: return 0
+    media = sum(valores) / len(valores)
+    variancia = sum((x - media) ** 2 for x in valores) / len(valores)
+    desvio = math.sqrt(variancia) if variancia > 0 else 0
     if desvio == 0: return 0
-    media = valores.mean()
     notas = [max(-2, min(2, (stats["frequencia"].get(x, 0) - media) / desvio)) for x in jogo]
-    return float(np.mean(notas))
+    return sum(notas) / len(notas)
 
 def pontuar_combinacoes(jogo, stats):
-    import numpy as np
-    nota_pares = np.mean([math.log1p(stats["pares"].get(p, 0)) for p in combinations(jogo, 2)])
-    nota_trincas = np.mean([math.log1p(stats["trincas"].get(t, 0)) for t in combinations(jogo, 3)]) if len(jogo) >= 3 else 0
+    pares_vals = [math.log1p(stats["pares"].get(p, 0)) for p in combinations(jogo, 2)]
+    nota_pares = sum(pares_vals) / len(pares_vals) if pares_vals else 0
+    trincas_vals = [math.log1p(stats["trincas"].get(t, 0)) for t in combinations(jogo, 3)] if len(jogo) >= 3 else []
+    nota_trincas = sum(trincas_vals) / len(trincas_vals) if trincas_vals else 0
     return float(nota_pares * 0.15 + nota_trincas * 0.05)
 
 def avaliar(jogo, stats, n, k):
