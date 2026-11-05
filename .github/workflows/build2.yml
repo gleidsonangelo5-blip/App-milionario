@@ -1,3 +1,4 @@
+ 
 name: Build App
 on: push
 jobs:
@@ -23,7 +24,7 @@ jobs:
           sed -i 's/TROCAR_SENHA_AQUI/${{ secrets.KEYSTORE_PASSWORD }}/g' buildozer.spec
       - name: Build with Buildozer
         run: |
-          yes | buildozer android release
+          buildozer android release
       - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
