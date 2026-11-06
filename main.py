@@ -1,4 +1,4 @@
- from kivy.config import Config
+from kivy.config import Config
 Config.set('graphics', 'multisamples', '0')
 Config.set('graphics', 'resizable', '0')
 
